@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Corso Vue.js</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <style>
+        #app {
+            margin-left: 50px;
+            margin-top: 50px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="app" class="container">
+        <div>
+            In generale per l'event handling si utilizza la direttiva v-on. Potete passargli un'espressione javascript o il nome di un metodo. I metodi devono essere definiti dentro la proprietà<code>methods</code>.<br> Se il metodo che vogliamo richiamare non ha parametri possiamo inserire solo il nome, altrimenti possiamo passare gli argomenti con una sintassi standard javascript:
+            <ul>
+                <li>
+                    Senza parametri: <code>v-on:click="doSomething"</code>
+                </li>
+                <li>
+                    Con parametri: <code>v-on:click="doSomething(5)"</code>
+                </li>
+            </ul>
+            Se vi serve l'evento potete utilizzare l'argomento <code>$event</code>
+            <h4>Al momento ci sono {{elements.length}} elementi nell'array</h4>
+            <button v-on:click="add3Elements">Aggiungi 3 elementi</button>
+            <button v-on:click="addElements(10)">Aggiungi 10 elementi</button>
+            <button v-on:click="addElements(10,$event)">Aggiungi 10 elementi con evento</button>
+        </div>
+        <hr>
+        <div>
+            Esistono poi gli event modifiers, ovvero keyword che potete concatenare al nome dell'evento e che aggiungono dei comportamenti standard; i più utilizzati sono:
+            <ul>
+                <li>
+                    <code>prevent</code>: richiama <code>.preventDefault()</code> in automatico e si utilizza ad esempio per prevenire il submit di un form <code>v-on:submit.prevent="ourMethod"></code>
+                </li>
+                <li>
+                    <code>stop</code> richiama <code>.stopPropagation()</code> in automatico e si utilizza ad esempio per prevenire la propagazione di un click<code>v-on:click.stop="doThis"</code>
+                </li>
+            </ul>
+        </div>
+        <hr>
+        <div>
+            I key modifiers invece ci permettono di intercettare il keyCode, utile se vogliamo intercettare specifici tasti. Esistono degli aliass come <code>enter</code> o <code>esc</code> che si possono utilizzare per intercettare i tasti più comuni
+            <br>
+            <input class="form-control" type="text" v-on:keyup.enter="logEvent('enter')" v-on:keyup.esc="logEvent('esc')">
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script type="text/javascript">
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                elements: []
+            },
+            methods: {
+                add3Elements: function() {
+                    this.elements.push(1);
+                    this.elements.push(2);
+                    this.elements.push(3);
+                },
+                addElements: function(number, event) {
+                    if (event) {
+                        console.log(event);
+                    }
+                    for (var i = 0; i < number; i++) {
+                        this.elements.push(i);
+                    }
+                },
+                logEvent: function(name) {
+                    console.log('key ' + name);
+                }
+            }
+        })
+
+    </script>
+</body>
+
+</html>

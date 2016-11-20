@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Corso Vue.js</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <style>
+        #app,
+        #app2 {
+            margin-left: 50px;
+            margin-top: 50px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div>
+            I watchers sono metodi che dite di eseguire a Vue quando delle proprietà cambiano, è un modo diverso per reagire a dati che cambiano , ad esempio molto utile quando volete operazioni asincrone o che hanno un certo costo in risposta al cambiamento di alcune informazioni
+        </div>
+        <input type="text" v-model="search" placeholder="search">
+    </div>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script type="text/javascript">
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                search: ''
+            },
+            watch: {
+                search: function(newSearch) {
+                    console.debug("searching " + newSearch);
+                }
+            }
+        });
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Corso Vue.js</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <style>
+        #app {
+            margin-left: 50px;
+            margin-top: 50px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="app" class="container">
+        <button @click="addProduct" class="btn btn-danger">Aggiungi prodotto</button>
+        <hr>
+        <div>
+            Per presentare delle liste la direttiva base è v-for. La sintassi da utilizzare è 'alias in property' dove property è un array.<br> Si può accedere anche al parent scope (currencySymbol).
+            <ul>
+                <li v-for="product in products"> Il prodotto {{product.name}} costa {{currencySymbol}} {{product.price}}</li>
+            </ul>
+        </div>
+        <hr>
+        <div>
+            Se avete bisogno dell'indice si può usare una forma alternativa '(alias, indexAlias) in property'
+            <ul>
+                <li v-for="(product, index) in products"> Il {{index}}° prodotto {{product.name}} costa {{currencySymbol}} {{product.price}}</li>
+            </ul>
+        </div>
+        <hr>
+        <div>
+            Potete utilizzare la sintassi template se volete renderizzare più elementi, a runtime il tag template non viene inserito
+            <ul>
+                <template v-for="(product, index) in products">
+                    <li> Il {{index}}° prodotto è {{product.name}} </li>
+                    <li> Costa {{currencySymbol}} {{product.price}}</li>
+                </template>
+            </ul>
+        </div>
+        <hr>
+        <div>
+            Potete utilizzare v-for anche per ciclare tra le proprietà di un oggetto<br> In questo caso avete a disposizione sia key che index
+            <ul>
+                <li v-for="(property, key, index) in myObject"> La proprietà {{key}} vale {{property}} </li>
+            </ul>
+        </div>
+        <hr>
+        <div>
+            Esempio di delete in linea
+            <ul>
+                <li v-for="product in products">
+                    {{product.name}}
+                    <button @click="removeProduct(product)">Elimina</button>
+                </li>
+            </ul>
+        </div>
+        <hr>
+        <div>
+            In generale se è possibile, quando si utilizza v-for è sempre meglio specificare la key dei singoli elementi con l'argomento key; questo aiuta Vue a renderizzare le liste in maniera più efficiente.
+            <ul>
+                <li v-for="client in clients" :key="client.id">
+                    {{client.name}}
+                </li>
+            </ul>
+        </div>
+        <hr>
+        <div>
+            Vue wrappa solo alcuni metodi che operano sugli array, di conseguenza si accorge delle modifiche agli array quando li usate. Questi sono i mutation methods, ovvero metodi che mutano l'array corrente. I metodi sono i seguenti:
+            <ul>
+                <li>
+                    <a href="https://developer.mozilla.org/it/docs/Web/JavaScript/Reference/Global_Objects/Array/push">push</a>
+                </li>
+                <li>
+                    <a href="https://developer.mozilla.org/it/docs/Web/JavaScript/Reference/Global_Objects/Array/pop">pop</a>
+                </li>
+                <li>
+                    <a href="https://developer.mozilla.org/it/docs/Web/JavaScript/Reference/Global_Objects/Array/shift">shift</a>
+                </li>
+                <li>
+                    <a href="https://developer.mozilla.org/it/docs/Web/JavaScript/Reference/Global_Objects/Array/unshift">unshift</a>
+                </li>
+                <li>
+                    <a href="https://developer.mozilla.org/it/docs/Web/JavaScript/Reference/Global_Objects/Array/splice">splice</a>
+                </li>
+                <li>
+                    <a href="https://developer.mozilla.org/it/docs/Web/JavaScript/Reference/Global_Objects/Array/sort">sort</a>
+                </li>
+                <li>
+                    <a href="https://developer.mozilla.org/it/docs/Web/JavaScript/Reference/Global_Objects/Array/reverse">reverse</a>
+                </li>
+            </ul>
+        </div>
+        <hr>
+        <div>
+            Esistono poi non mutation methods, che invece di modificare l'array originale vi restituiscono un nuovo array, un esempio di questi metodi è concat. Quando rimpiazzate un array Vue se ne accorge e rieffettua il render della lista, tuttavia con delle logiche di ottimizzazione che per gli elementi del nuovo che coincidono con elementi vecchi i nodi non vengano ricreati ma semplicemente riusati.
+            <ul>
+                <li v-for="element in array1">
+                    {{element}}
+                </li>
+            </ul>
+            <button @click="concatArray">Sostituisci array</button>
+        </div>
+        <hr>
+        <div>
+            Dovete stare attenti a non usare questo metodo per sostituire gli elementi:<br> vm.items[indexOfItem] = newValue<br> questo cambiamento non viene intercettato da Vue, ma potete utilizzare questa funzione messa a disposizione sempre della libreria:<br> Vue.set(example1.items, indexOfItem, newValue)
+        </div>
+        <hr>
+        <div>
+            Se volete mostrare un array ordinato o filtrato, il miglior modo è quello di utilizzare le computed
+            <ul>
+                <li v-for="element in evenNumbers">
+                    {{element}}
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script type="text/javascript">
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                currencySymbol: '€',
+                products: [{
+                    name: 'pere',
+                    price: 3.2
+                }, {
+                    name: 'mele',
+                    price: 2.2
+                }, {
+                    name: 'banane',
+                    price: 5
+                }],
+                myObject: {
+                    id: 414,
+                    name: 'pino',
+                    description: 'this is the description',
+                    age: 40
+                },
+                clients: [{
+                        id: 1,
+                        name: 'mario rossi'
+                    }, {
+                        id: 2,
+                        name: 'carlo verdi'
+                    }, {
+                        id: 3,
+                        name: 'pinco pallo'
+                    },
+
+                ],
+                array1: [1, 2, 3]
+            },
+            methods: {
+                concatArray: function() {
+                    this.array1 = this.array1.concat([4, 5, 6]);
+
+                },
+                removeProduct: function(product) {
+                    var index = this.products.indexOf(product);
+                    if (index > -1) {
+                        this.products.splice(index, 1);
+                        console.log(index);
+                    }
+                },
+                addProduct: function() {
+                    this.products.push({
+                        name: 'new product',
+                        price: 99
+                    });
+                }
+            },
+            computed: {
+                evenNumbers: function() {
+                    return this.array1.filter(function(number) {
+                        return number % 2 === 0
+                    });
+                }
+
+            }
+
+        });
+
+    </script>
+</body>
+
+</html>

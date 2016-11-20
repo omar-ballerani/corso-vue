@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Corso Vue.js</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <style>
+        #app {
+            margin-left: 50px;
+            margin-top: 50px;
+        }
+        
+        .error {
+            background-color: lightcoral;
+            color: white;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="app" class="container">
+        <div>
+            Per bindare una classe css a degli elementi si utilizza v-bind con argomento 'class'<br> Come vedete si può usare insieme a specificare class="" nell'elemento, quelle specificate in v-bind in questo caso vengono messe in aggiunte
+        </div>
+        <input v-bind:class="{'error': hasErrors}" type="text" v-model="emailAddress" placeholder="insert an email address" class="form-control"><br>
+        <input v-bind:class="{'error': hasErrors}" type="text" v-model="confirmEmailAddress" placeholder="confirm email address" class="form-control"><br>
+        <input type="checkbox" v-model="hasErrors"> Errors
+    </div>
+    <hr>
+    <div id="app2" class="container">
+        <div>
+            Potete anche utilizzare una oggetto, viene valutato da Vue e ogni proprietà che ha un truly value viene aggiunta come classe
+        </div>
+        <input v-bind:class="cssClasses" type="text" v-model="emailAddress" placeholder="insert an email address"><br>
+        <input type="checkbox" v-model="cssClasses.error"> errors
+    </div>
+    <hr>
+    <div id="app3" class="container">
+        <div>
+            Potete anche utilizzare le computed
+        </div>
+        <input v-bind:class="emailCssClasses" type="text" v-model="emailAddress" placeholder="insert an email address"><br>
+    </div>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script type="text/javascript">
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                emailAddress: '',
+                confirmEmailAddress: '',
+                hasErrors: false
+            }
+        })
+
+        var vm2 = new Vue({
+            el: '#app2',
+            data: {
+                emailAddress: '',
+                confirmEmailAddress: '',
+                cssClasses: {
+                    'form-control': true,
+                    error: false
+                }
+            }
+        })
+
+        var vm3 = new Vue({
+            el: '#app3',
+            data: {
+                emailAddress: ''
+            },
+            computed: {
+                emailCssClasses: function() {
+                    var isEmail = this.emailAddress.indexOf('@') > -1;
+                    var error = false;
+                    if (!isEmail) {
+                        error = true;
+                    }
+                    return {
+                        'form-control': true,
+                        error: error
+                    };
+
+                }
+
+            }
+        })
+
+    </script>
+</body>
+
+</html>

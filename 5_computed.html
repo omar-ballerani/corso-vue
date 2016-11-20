@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Corso Vue.js</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <style>
+        #app,
+        #app2 {
+            margin-left: 50px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div>
+            Esempio standard di computed property
+            <h4>Original message: "{{ message }}"</h4>
+            <h4>Computed reversed message: "{{ reversedMessage }}"</h4>
+        </div>
+        <div>
+            Il risultato di valutazione delle computed properties è messo in cache ed aggiornato solo quando una delle loro dipendenze cambia
+            <h4>Full name: {{ fullName }}</h4>
+            <input type="text" v-model="firstName">
+            <input type="text" v-model="lastName">
+            <button @click="modifyName">test me</button>
+        </div>
+    </div>
+    <hr>
+    <div id="app2">
+        <div>
+            Le computed oltre ad essere lette possono essere anche settate
+            <h4>Firstname: {{ firstName }}</h4>
+            <h4>Lastname: {{ lastName }}</h4>
+            <input type="text" v-model="fullName">
+        </div>
+    </div>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script type="text/javascript">
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                message: 'Hello',
+                firstName: "Mario",
+                lastName: "Rossi"
+            },
+            methods: {
+                modifyName: function() {
+                    for (var index = 0; index < 50; index++) {
+                        this.firstName = "Mario" + index;
+                    }
+                }
+            },
+            computed: {
+                // a computed getter
+                reversedMessage: function() {
+                    // `this` points to the vm instance
+                    return this.message.split('').reverse().join('')
+                },
+                fullName: function() {
+                    console.debug('computed fullName');
+                    return this.firstName + ' ' + this.lastName;
+                }
+            }
+        })
+
+
+        var vm2 = new Vue({
+            el: '#app2',
+            data: {
+                firstName: "Mario",
+                lastName: "Rossi"
+            },
+            computed: {
+                fullName: {
+                    get: function() {
+                        return this.firstName + ' ' + this.lastName;
+                    },
+                    set: function(newFullName) {
+                        var names = newFullName.split(' ')
+                        this.firstName = names[0]
+                        if (names.length > 1) {
+                            this.lastName = names[1]
+                        }
+                    }
+                }
+
+            }
+        })
+
+    </script>
+</body>
+
+</html>

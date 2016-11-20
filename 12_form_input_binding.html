@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Corso Vue.js</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <style>
+        #app {
+            margin-left: 50px;
+            margin-top: 50px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="app" class="container">
+        <div>
+            La direttiva base per bindare gli elementi dei form è <code>v-model</code>. Questa applica un tipo di bind 2-way, ovvero quando editate gli input viene aggiornata la proprietà corrispondente e viceversa.
+            <input type="text" class="form-control" v-model="product.name" placeholder="name" />
+            <span>Il nome è {{product.name}}</span>
+            <textarea class="form-control" v-model="product.description" placeholder="descrizione"> </textarea>
+            <span>La descrizione è {{product.description}}</span>
+            <input type="text" class="form-control" v-model="product.quantity" placeholder="quantità" />
+            <span>La quantità è {{product.quantity}}</span>
+            <br>
+            <input type="checkbox" v-model="product.available">Disponibile
+            <br>
+            <input type="radio" id="one" value="One" v-model="product.picked">
+            <label for="one">One</label>
+            <br>
+            <input type="radio" id="two" value="Two" v-model="product.picked">
+            <label for="two">Two</label>
+            <br>
+            <span>Picked: {{ product.picked }}</span>
+            <br>
+            <select v-model="product.category">
+  <option value="1">A</option>
+  <option value="2">B</option>
+  <option value="3">C</option>
+</select>
+            <span>Selected: {{ product.category }}</span>
+            <br>
+            <button v-on:click="save" class="btn btn-primary">Salva</button>
+        </div>
+        <hr>
+        <div>
+            Essendo che il binding è 2 way, potete dunque impostare i dati da javascript e come conseguenza la view si aggiorna:
+            <br>
+            <button v-on:click="setValues" class="btn btn-danger">Imposta dati da javascript</button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script type="text/javascript">
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                product: {
+                    name: '',
+                    description: '',
+                    quantity: 6,
+                    available: true,
+                    picked: '',
+                    category: '1'
+                }
+            },
+            methods: {
+                save: function() {
+                    console.log(this.product);
+                },
+                setValues: function() {
+                    this.product.name = "nome da js";
+                    this.product.description = "descrizione da js";
+                    this.product.quantity = 999;
+
+
+                }
+            }
+        })
+
+    </script>
+</body>
+
+</html>

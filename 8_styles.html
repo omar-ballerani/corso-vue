@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Corso Vue.js</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <style>
+        #app {
+            margin-left: 50px;
+            margin-top: 50px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="app" class="container">
+        <div>
+            Come per le classi css, per bindare attributi css si utilizza sempre v-bind ma con argomento 'style'<br> Il funzionamento è lo stesso che per le classi, dunque andiamo direttamente sulle computed :)
+        </div>
+        <input v-bind:style="pswStyles" type="text" v-model="psw" placeholder="insert password here" class="form-control"><br>
+    </div>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script type="text/javascript">
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                psw: ''
+            },
+            computed: {
+                pswStyles: function() {
+                    var color, bcolor;
+                    if (this.psw.length >= 0 && this.psw.length <= 3) {
+                        color = "white";
+                        bcolor = "red";
+                    } else if (this.psw.length >= 4 && this.psw.length <= 6) {
+                        color = "blue";
+                        bcolor = "yellow";
+                    } else if (this.psw.length >= 7) {
+                        color = "green";
+                        bcolor = "white";
+                    }
+
+                    return {
+                        color: color,
+                        'background-color': bcolor
+                    };
+
+                }
+
+            }
+        })
+
+    </script>
+</body>
+
+</html>

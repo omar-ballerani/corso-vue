@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Corso Vue.js</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <style>
+        #app {
+            margin-left: 50px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div>Standard mustache syntax</div>
+        <h4> Questo si aggiorna {{msg}} </h4>
+
+        <div>v-once interpola solo la prima volta e poi non si aggiorna</div>
+        <h4 v-once>Questo rimane lo stesso: {{fixedMsg}} </h4>
+
+        <div>v-html serve a bindare html puro, attenzione è pericoloso</div>
+        <h4 v-html="rawHtml"></h4>
+
+        <div>v-bind serve a bindare direttamente un attributo, in questo caso l'id, ad un valore che può essere dinamico</div>
+        <h4 v-bind:id="dynamicId">Questo ha un id dinamico</h4>
+
+        <div>la sintassi mustache è javascript, di conseguenza potete utilizzare anche espressioni, ma una sola</div>
+        <h4>{{enabled? 'ABILITATO' : 'NON ABILITATO'}}</h4>
+
+        <div>filtri si possono utilizzare per trafsformazioni standard di testo</div>
+        <h4>{{ message | capitalize }}</h4>
+
+        <div>poi ci sono direttive standard come v-if </div>
+        <h4 v-if="enabled">ABILITATO</h4>
+
+        <div>altre direttive hanno degli argomenti, come ad esempio v-bind </div>
+        <a v-bind:href="link">Questo è un link dinamico</a>
+
+        <div>esistono poi delle scorciatoie che si possono usare, ':' per v-bind e '@' per v-on</div>
+        <a @click="doSomething" href="javascript:;">link che richiama un metodo </a>
+        <br>
+        <a :href="link">Ancora un altro link</a>
+    </div>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script type="text/javascript">
+        var data = {
+            msg: "hello world",
+            fixedMsg: "hello vue !",
+            rawHtml: "Questo testo è <b> html </b>",
+            dynamicId: "123456",
+            enabled: true,
+            message: "prima lettera grande",
+            link: "http://www.google.it",
+
+        };
+
+        var app = new Vue({
+            el: '#app',
+            data: data,
+            methods: {
+                doSomething: function() {
+                    console.debug('doSomething')
+                }
+            },
+            filters: {
+                capitalize: function(value) {
+                    if (!value) return ''
+                    value = value.toString()
+                    return value.charAt(0).toUpperCase() + value.slice(1)
+                }
+            }
+        })
+
+    </script>
+</body>
+
+</html>

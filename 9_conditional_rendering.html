@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Corso Vue.js</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <style>
+        #app {
+            margin-left: 50px;
+            margin-top: 50px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="app" class="container">
+        <button @click="toggleEnabled" class="btn btn-danger">Toggle enabled</button>
+        <hr>
+        <div>
+            La direttiva base è v-if a cui dovete passare il nome della property che deve valutare
+            <h4 v-if="enabled">ENABLED</h4>
+        </div>
+        <hr>
+        <div>
+            Se applicato a un elemento padre di altri, nasconde anche tutti i figli....
+            <div v-if="enabled">
+                <h1>Titolone</h1>
+                Questa è una sezione con un sacco di cose dentro che si vede solo quando enabled=truly
+                <ul>
+                    <li>item 1</li>
+                    <li>item 2</li>
+                    <li>item 3</li>
+                </ul>
+            </div>
+        </div>
+        <hr>
+        <div>
+            Potete utilizzarlo in combinazione con v-else
+            <h4 v-if="enabled">Creato quando enabled=truly</h4>
+            <h4 v-else="enabled">Creato quando enabled=falsy </h4>
+        </div>
+        <hr>
+        <div>
+            Un'altra direttiva che potete utilizzare è v-show; la differenza tra questa e v-if è che 'v-show' va ad agire semplicemente nell'attributo css 'display', di conseguenza anche se non visualizzato l'elemento rimane sempre nel DOM della pagina. Con 'v-if' invece l'elemento viene effettivamente rimosso e ricreato ogni volta. Oltretutto v-show non supporta v-else.<br> Conviene utilizzare v-if quando è raro che a runtime la property cambia, v-show quando cambia molto spesso, questo perchè v-if ha un costo maggiore a runtime ma v-show pesa di più al primo render.
+            <h4 v-show="enabled">Abilitato con v-show</h4>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script type="text/javascript">
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                enabled: true
+            },
+            methods: {
+                toggleEnabled: function() {
+                    this.enabled = !this.enabled;
+                }
+            }
+        })
+
+    </script>
+</body>
+
+</html>
