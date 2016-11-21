@@ -10,6 +10,7 @@
     <style>
         #app {
             margin-left: 50px;
+            margin-left: 50px;
             margin-top: 50px;
         }
 
@@ -19,30 +20,30 @@
 <body>
     <div id="app" class="container">
         <div>
-            La direttiva base per bindare gli elementi dei form è <code>v-model</code>. Questa applica un tipo di bind 2-way, ovvero quando editate gli input viene aggiornata la proprietà corrispondente e viceversa.
-            <input type="text" class="form-control" v-model="product.name" placeholder="name" />
-            <span>Il nome è {{product.name}}</span>
-            <textarea class="form-control" v-model="product.description" placeholder="descrizione"> </textarea>
-            <span>La descrizione è {{product.description}}</span>
-            <input type="text" class="form-control" v-model="product.quantity" placeholder="quantità" />
-            <span>La quantità è {{product.quantity}}</span>
+ La direttiva base per bindare gli elementi dei form è <code>v-model</code>. Questa applica un tipo di bind 2-way, ovvero quando editate gli input viene aggiornata la proprietà corrispondente e viceversa.
+            <input type="text" class="form-control" v-model="name" placeholder="name" />
+            <span>Il nome è {{name}}</span>
+            <textarea class="form-control" v-model="description" placeholder="descrizione"> </textarea>
+            <span>La descrizione è {{description}}</span>
+            <input type="text" class="form-control" v-model="quantity" placeholder="quantità" />
+            <span>La quantità è {{quantity}}</span>
             <br>
-            <input type="checkbox" v-model="product.available">Disponibile
+            <input type="checkbox" v-model="available">Disponibile
             <br>
-            <input type="radio" id="one" value="One" v-model="product.picked">
+            <input type="radio" id="one" value="One" v-model="picked">
             <label for="one">One</label>
             <br>
-            <input type="radio" id="two" value="Two" v-model="product.picked">
+            <input type="radio" id="two" value="Two" v-model="picked">
             <label for="two">Two</label>
             <br>
-            <span>Picked: {{ product.picked }}</span>
+            <span>Picked: {{ picked }}</span>
             <br>
-            <select v-model="product.category">
+            <select v-model="category">
   <option value="1">A</option>
   <option value="2">B</option>
   <option value="3">C</option>
 </select>
-            <span>Selected: {{ product.category }}</span>
+            <span>Selected: {{ category }}</span>
             <br>
             <button v-on:click="save" class="btn btn-primary">Salva</button>
         </div>
@@ -59,23 +60,22 @@
         var vm = new Vue({
             el: '#app',
             data: {
-                product: {
-                    name: '',
-                    description: '',
-                    quantity: 6,
-                    available: true,
-                    picked: '',
-                    category: '1'
-                }
+                name: '',
+                description: '',
+                quantity: 6,
+                available: true,
+                picked: '',
+                category: '1'
+
             },
             methods: {
                 save: function() {
                     console.log(this.product);
                 },
                 setValues: function() {
-                    this.product.name = "nome da js";
-                    this.product.description = "descrizione da js";
-                    this.product.quantity = 999;
+                    this.name = "nome da js";
+                    this.description = "descrizione da js";
+                    this.quantity = 999;
 
 
                 }

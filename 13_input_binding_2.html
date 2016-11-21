@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Corso Vue.js</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <style>
+        #app {
+            margin-left: 50px;
+            margin-top: 50px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="app" class="container">
+        <div>
+            Per radio, checkbox e select è possibile specificare il value in diversi modi
+            <hr>
+            <br> Non specificando niente, utilizza bool <br>
+            <input type="checkbox" v-model="simpleAvailable">
+            <div> Valore: {{simpleAvailable}}</div>
+            <hr> Oppure si può utilizzare <code>v-bind:true-value</code> e <code>v-bind:false-value</code> per specificare delle property che rappresentno il valore di quando è checked o meno
+            <br>
+            <input type="checkbox" v-model="complexAvailable" v-bind:true-value="trueValue" v-bind:false-value="falseValue">
+            <div> Valore: {{complexAvailable}}</div>
+            <hr> Standard radio dove il valore è specificato con <code>value</code><br>
+            <input type="radio" v-model="simpleRadio" value="option1" name="radio1">Option 1
+            <input type="radio" v-model="simpleRadio" value="option2" name="radio1"> Option 2
+            <div>Valore {{simpleRadio}}</div>
+            <hr> Radio con valori specifici per ogni opzione, specificati con <code>v-bind:value</code>
+            <br>
+            <input type="radio" v-model="complexRadio" v-bind:value="trueValue" name="radio2"> Opzione 1
+            <input type="radio" v-model="complexRadio" v-bind:value="falseValue" name="radio2"> Opzione 2
+            <div>Valore {{complexRadio}}</div>
+        </div>
+
+    </div>
+
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script type="text/javascript">
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                simpleAvailable: null,
+                standardAvailable: null,
+                complexAvailable: null,
+                trueValue: 'CUSTOM_TRUE_VALUE',
+                falseValue: 'CUSTOM_FALSE_VALUE',
+                simpleRadio: null,
+                complexRadio: null
+            },
+            methods: {
+                save: function() {
+                    console.log(this.product);
+                },
+                setValues: function() {
+                    this.product.name = "nome da js";
+                    this.product.description = "descrizione da js";
+                    this.product.quantity = 999;
+
+
+                }
+            }
+        })
+
+    </script>
+</body>
+
+</html>

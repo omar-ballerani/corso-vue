@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Corso Vue.js</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <style>
+        #app {
+            margin-left: 50px;
+            margin-top: 50px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="app" class="container">
+        Esistono diversi modifiers che potete applicare nei form per deviare dal comportamento standard.
+        <br><br>
+        <code>lazy</code> dice a Vue js di modificare il valore quando si verifica il change event e non dopo ogni input event
+        <input type="text" class="form-control" v-model.lazy="name">
+        <div>Il valore è {{name}}</div>
+        <hr>
+        <code>number</code> dice a Vue di tentare di trasformare l'input digitato dall'utente in un Number javascript, altrimenti usa una stringa
+        <input class="form-control" v-model.number="age" type="text">
+        <hr>
+        <code>trim</code> elimina automaticamente spazi prima e dopo l'input dell'utente
+        <input type="text" v-model.trim="description" class="form-control">
+    </div>
+
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script type="text/javascript">
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                name: '',
+                age: 55,
+                description: ''
+            }
+        })
+
+    </script>
+</body>
+
+</html>
