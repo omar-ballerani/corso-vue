@@ -7,41 +7,63 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <style>
+        .container {
+            margin-top: 50px;
+            margin-left: 50px;
+        }
+    </style>
 </head>
 
 <body>
     <div class="container">
-        <div id="app">
-            {{ message }}
-        </div>
+        <p class="lead">
+            Vue ci permette di renderizzare in maniera dichiarativa dei dati che vogliamo presentare nel DOM, il tutto in maniera molto semplice<br />
+            La sintassi che si utilizza per renderizzare i nostri dati dentro html è <code>{{questa}}</code>
+        </p>
+        <hr />
 
-        <div id="app-2">
+        <div id="app" class="lead">
+            Veniamo al primo esempio:
+            <h1>{{ message }}</h1>
+            Cosa succede se proviamo a modificare la variabile message?
+        </div>
+        <hr />
+        <div id="app-2" class="lead">
+            Un'altro esempio, binding di attributi con la direttiva <code>v-bind</code>:<br />
             <span v-bind:title="message">
                 Hover your mouse over me for a few seconds to see my dynamically bound title!
             </span>
         </div>
-        <div id="app-3">
-            <p v-if="seen">Now you see me</p>
+        <hr />
+        <div id="app-3" class="lead">
+            Direttiva <code>v-if</code>, per mostrare o nascondere degli elementi:<br />
+            <p v-if="visible">La property visible è true!</p>
+            Proviamo a modificare la proprietà visible...
         </div>
-
-        <div id="app-4">
+        <hr />
+        <div id="app-4" class="lead">
+            Direttiva <code>v-for</code>, per mostrare una lista di elementi contenuti in un array:<br />
             <ol>
                 <li v-for="todo in todos">
                     {{ todo.text }}
                 </li>
             </ol>
         </div>
-
-        <div id="app-5">
+        <hr />
+        <div id="app-5" class="lead">
+            La direttiva <code>v-on</code>si usa per attaccare degli event listener a degli elementi html e richiamare nostri metodi
             <p>{{ message }}</p>
             <button v-on:click="reverseMessage">Reverse Message</button>
         </div>
-
-        <div id="app-6">
+        <hr />
+        <div id="app-6" class="lead">
+            <code>v-model</code> serve ad applicare two way binding a degli elementi <code>input</code>
             <p>{{ message }}</p>
-            <input v-model="message">
+            <input v-model="message" class="form-control">
         </div>
     </div>
+
     <script src="https://unpkg.com/vue/dist/vue.js"></script>
 
     <script type="text/javascript">
@@ -62,7 +84,7 @@
         var app3 = new Vue({
             el: '#app-3',
             data: {
-                seen: true
+                visible: true
             }
         });
 
@@ -85,7 +107,7 @@
                 message: 'Hello Vue.js!'
             },
             methods: {
-                reverseMessage: function() {
+                reverseMessage: function () {
                     this.message = this.message.split('').reverse().join('')
                 }
             }
