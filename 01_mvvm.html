@@ -1,7 +1,7 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html>
-
 <head>
+    <meta charset="utf-8">
     <title>Corso Vue.js</title>
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -11,32 +11,23 @@
 
 <body>
     <div class="container">
-        <h1>Getting started</h1>
+        <h1>MVVM</h1>
         <p class="lead">
-            Vue.js è un framework per costruire interfacce utente in maniera dinamica. A differenza di altri framework monolitici, è un framework costituito da diverse librerie che si possono utilizzare o meno.
-            <br /><br />
-            La libreria core (vue.js) si preoccupa solo della view, ovvero della user interface, e può essere utilizzata da sola per fare data-binding dei propri oggetti javascript
-            con il DOM, senza dunque utilizzare librerie come JQuery per aggiornare il DOM quando i dati cambiano e viceversa.
-            <br /><br />
-            Oltre alla parte di view, aggiungendo altre librerie facenti parte sempre del framework Vue (router, loader, etc) è possibile arrivare a costruire Single Page Application molto efficienti.
-            <br /><br />
-            Alcuni link utili:
-            <ul>
+            Il Model View ViewModel Ã¨ un design pattern utilizzato per costruire interfacce utente. Descrive come mantenere semplice una sofisticata UI dividendola in tre componenti:
+            <ul class="lead">
                 <li>
-                    <a href="https://vuejs.org/">Sito ufficiale</a>
+                    <code>Model:</code> il vostro persistito Domain Model, tipicamente in un'applicazione Javascript richiamerete dei servizi per leggere questi dati e per aggiornarli<br /><br />
                 </li>
                 <li>
-                    <a href="https://github.com/vuejs/vue">Codice sorgente</a>
+                    <code>ViewModel:</code> una rappresentazione in codice dei dati e delle operazioni presenti nella vostra UI; per esempio se state implementando una lista tipicamente avrete un Array contenente
+                    i vari elementi e dei metodi per aggiungere / aggiornare / eliminare questi elementi.<br /><br />
                 </li>
                 <li>
-                    <a href="http://bestof.js.org/">Best of Javascript</a>
-                </li>
-                <li>
-                    <a href="https://developer.mozilla.org/it/docs/Web/JavaScript">Mozilla developer network</a>
+                    <code>View:</code> un'interfaccia interattiva e visible che rappresenta lo stato del vostro View Model. Mostra dati del View Model ed invia comandi a questo, si aggiorna quando lo stato del View Model cambia
                 </li>
             </ul>
-
         </p>
+        <img src="images/mvvm-light.png" />
     </div>
 
 </body>
