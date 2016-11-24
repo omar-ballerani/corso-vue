@@ -17,7 +17,7 @@
 </head>
 
 <body>
-    <div id="app" class="container-fluid">
+    <div id="app" class="container-fluid lead">
         <h4 v-show="levelMsg.length > 0">{{levelMsg}}</h4>
         <shopping-cart v-bind:purchased-products="products" currency="$" v-on:changed-total="evaluateLevel"></shopping-cart>
     </div>

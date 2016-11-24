@@ -17,11 +17,13 @@
 </head>
 
 <body>
-    <div id="app" class="container">
-        <div>
-            Come per le classi css, per bindare attributi css si utilizza sempre v-bind ma con argomento 'style'<br> Il funzionamento è lo stesso che per le classi, dunque andiamo direttamente sulle computed :)
+    <div class="container lead" >
+        <div id="app" class="container">
+            <div>
+                Come per le classi css, per bindare attributi css si utilizza sempre v-bind ma con argomento 'style'<br> Il funzionamento è lo stesso che per le classi, dunque andiamo direttamente sulle computed :)
+            </div>
+            <input v-bind:style="pswStyles" type="text" v-model="psw" placeholder="insert password here" class="form-control"><br>
         </div>
-        <input v-bind:style="pswStyles" type="text" v-model="psw" placeholder="insert password here" class="form-control"><br>
     </div>
     <script src="https://unpkg.com/vue/dist/vue.js"></script>
     <script type="text/javascript">

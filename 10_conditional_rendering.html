@@ -17,11 +17,11 @@
 </head>
 
 <body>
-    <div id="app" class="container">
+    <div id="app" class="container lead">
         <button @click="toggleEnabled" class="btn btn-danger">Toggle enabled</button>
         <hr>
         <div>
-            La direttiva base è v-if a cui dovete passare il nome della property che deve valutare
+            La direttiva base è <code>v-if</code> a cui dovete passare il nome della property che deve valutare
             <h4 v-if="enabled">ENABLED</h4>
         </div>
         <hr>
@@ -39,13 +39,16 @@
         </div>
         <hr>
         <div>
-            Potete utilizzarlo in combinazione con v-else
+            Potete utilizzarlo in combinazione con <code>v-else</code>
             <h4 v-if="enabled">Creato quando enabled=truly</h4>
             <h4 v-else="enabled">Creato quando enabled=falsy </h4>
         </div>
         <hr>
         <div>
-            Un'altra direttiva che potete utilizzare è v-show; la differenza tra questa e v-if è che 'v-show' va ad agire semplicemente nell'attributo css 'display', di conseguenza anche se non visualizzato l'elemento rimane sempre nel DOM della pagina. Con 'v-if' invece l'elemento viene effettivamente rimosso e ricreato ogni volta. Oltretutto v-show non supporta v-else.<br> Conviene utilizzare v-if quando è raro che a runtime la property cambia, v-show quando cambia molto spesso, questo perchè v-if ha un costo maggiore a runtime ma v-show pesa di più al primo render.
+            Un'altra direttiva che potete utilizzare è <code>v-show</code>; la differenza tra questa e <code>v-if</code> è che <code>v-show</code> va ad agire semplicemente 
+            nell'attributo css 'display', di conseguenza anche se non visualizzato l'elemento rimane sempre nel DOM della pagina. Con <code>v-if</code> invece l'elemento viene 
+            effettivamente rimosso e ricreato ogni volta. Oltretutto v-show non supporta <code>v-else</code>.<br> Conviene utilizzare <code>v-if</code> quando è raro che a runtime 
+            la property cambia, <code>v-show</code> quando cambia molto spesso, questo perchè <code>v-if</code> ha un costo maggiore a runtime ma <code>v-show</code> pesa di più al primo render.
             <h4 v-show="enabled">Abilitato con v-show</h4>
         </div>
     </div>

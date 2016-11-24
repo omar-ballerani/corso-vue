@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
     <style>
         #app {
+            margin-top: 50px;
             margin-left: 50px;
         }
 
@@ -16,31 +17,31 @@
 </head>
 
 <body>
-    <div id="app">
+    <div id="app" class="container lead">
         <div>Standard mustache syntax</div>
         <h4> Questo si aggiorna {{msg}} </h4>
-
+        <hr />
         <div>v-once interpola solo la prima volta e poi non si aggiorna</div>
         <h4 v-once>Questo rimane lo stesso: {{fixedMsg}} </h4>
-
+        <hr />
         <div>v-html serve a bindare html puro, attenzione è pericoloso</div>
         <h4 v-html="rawHtml"></h4>
-
+        <hr />
         <div>v-bind serve a bindare direttamente un attributo, in questo caso l'id, ad un valore che può essere dinamico</div>
         <h4 v-bind:id="dynamicId">Questo ha un id dinamico</h4>
-
+        <hr />
         <div>la sintassi mustache è javascript, di conseguenza potete utilizzare anche espressioni, ma una sola</div>
         <h4>{{enabled? 'ABILITATO' : 'NON ABILITATO'}}</h4>
-
+        <hr />
         <div>filtri si possono utilizzare per trafsformazioni standard di testo</div>
         <h4>{{ message | capitalize }}</h4>
-
+        <hr />
         <div>poi ci sono direttive standard come v-if </div>
         <h4 v-if="enabled">ABILITATO</h4>
-
+        <hr />
         <div>altre direttive hanno degli argomenti, come ad esempio v-bind </div>
         <a v-bind:href="link">Questo è un link dinamico</a>
-
+        <hr />
         <div>esistono poi delle scorciatoie che si possono usare, ':' per v-bind e '@' per v-on</div>
         <a @click="doSomething" href="javascript:;">link che richiama un metodo </a>
         <br>

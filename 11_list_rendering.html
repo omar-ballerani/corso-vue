@@ -17,18 +17,18 @@
 </head>
 
 <body>
-    <div id="app" class="container">
+    <div id="app" class="container lead">
         <button @click="addProduct" class="btn btn-danger">Aggiungi prodotto</button>
         <hr>
         <div>
-            Per presentare delle liste la direttiva base è v-for. La sintassi da utilizzare è 'alias in property' dove property è un array.<br> Si può accedere anche al parent scope (currencySymbol).
+            Per presentare delle liste la direttiva base è <code>v-for</code>. La sintassi da utilizzare è <code>alias in property</code>  dove property è un array.<br> Si può accedere anche al parent scope (currencySymbol).
             <ul>
                 <li v-for="product in products"> Il prodotto {{product.name}} costa {{currencySymbol}} {{product.price}}</li>
             </ul>
         </div>
         <hr>
         <div>
-            Se avete bisogno dell'indice si può usare una forma alternativa '(alias, indexAlias) in property'
+            Se avete bisogno dell'indice si può usare una forma alternativa <code>(alias, indexAlias) in property</code>
             <ul>
                 <li v-for="(product, index) in products"> Il {{index}}° prodotto {{product.name}} costa {{currencySymbol}} {{product.price}}</li>
             </ul>
@@ -45,7 +45,7 @@
         </div>
         <hr>
         <div>
-            Potete utilizzare v-for anche per ciclare tra le proprietà di un oggetto<br> In questo caso avete a disposizione sia key che index
+            Potete utilizzare <code>v-for</code> anche per ciclare tra le proprietà di un oggetto<br> In questo caso avete a disposizione sia key che index
             <ul>
                 <li v-for="(property, key, index) in myObject"> La proprietà {{key}} vale {{property}} </li>
             </ul>
@@ -62,7 +62,8 @@
         </div>
         <hr>
         <div>
-            In generale se è possibile, quando si utilizza v-for è sempre meglio specificare la key dei singoli elementi con l'argomento key; questo aiuta Vue a renderizzare le liste in maniera più efficiente.
+            In generale se è possibile, quando si utilizza v-for è sempre meglio specificare la key dei singoli elementi con l'argomento key; questo aiuta Vue a renderizzare le 
+            liste in maniera più efficiente.
             <ul>
                 <li v-for="client in clients" :key="client.id">
                     {{client.name}}
@@ -98,7 +99,9 @@
         </div>
         <hr>
         <div>
-            Esistono poi non mutation methods, che invece di modificare l'array originale vi restituiscono un nuovo array, un esempio di questi metodi è concat. Quando rimpiazzate un array Vue se ne accorge e rieffettua il render della lista, tuttavia con delle logiche di ottimizzazione che per gli elementi del nuovo che coincidono con elementi vecchi i nodi non vengano ricreati ma semplicemente riusati.
+            Esistono poi non mutation methods, che invece di modificare l'array originale vi restituiscono un nuovo array, un esempio di questi metodi è <code>concat</code>. 
+            Quando rimpiazzate un array Vue se ne accorge e rieffettua il render della lista, tuttavia con delle logiche di ottimizzazione che per gli elementi del nuovo che coincidono 
+            con elementi vecchi i nodi non vengano ricreati ma semplicemente riusati.
             <ul>
                 <li v-for="element in array1">
                     {{element}}
@@ -108,7 +111,8 @@
         </div>
         <hr>
         <div>
-            Dovete stare attenti a non usare questo metodo per sostituire gli elementi:<br> vm.items[indexOfItem] = newValue<br> questo cambiamento non viene intercettato da Vue, ma potete utilizzare questa funzione messa a disposizione sempre della libreria:<br> Vue.set(example1.items, indexOfItem, newValue)
+            Dovete stare attenti a non usare questo metodo per sostituire gli elementi: <br><code>vm.items[indexOfItem] = newValue</code><br> questo cambiamento non viene intercettato da Vue, ma potete utilizzare questa funzione messa a 
+            disposizione sempre della libreria:<br> <code>Vue.set(example1.items, indexOfItem, newValue)</code> 
         </div>
         <hr>
         <div>
