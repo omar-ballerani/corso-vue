@@ -7,20 +7,52 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <style>
+        .container {
+            margin-top:50px;
+            margin-left:50px;
+        }
+    </style>
 </head>
 
 <body>
-    <div id="example">
+    <div id="app" class="container lead">
+        <div>
+            Ogni istanza di Vue si inizializza con la Constructor function relativa: <code> var vm = new Vue({ //options })</code><br /><br />
+            Per quanto non strettamente associato al pattern MVVM, il design di Vue è senza dubbio ispirato da questo,
+            di conseguenza si può utilizzare come convenzione quello di chiamare <code>vm</code> l'istanza di Vue che andiamo a creare<br /><br />
+            Quando si inizializza un'istanza di Vue bisogna passare un options object che può contenere proprietà per data, template, elemento su cui fare mount, metodi, etc.
+        </div>
+        <hr />
+        <div>
+            Parliamo della proprietà <code>data</code> dell'oggetto options: questa deve contenere tutte quelle proprietà che sono reattive e che vogliamo dunque utilizzare nel nostro template.<br />
+            N.B.: solo le proprietà che sono presenti in data al momento della creazione dell'istanza di Vue saranno reattive, se andiamo ad aggiungerne altre informazioni in un momento
+            successivvo alla creazione queste non scateneranno nessun aggiornamento della view.<br /><br />
+            L'istanza Vue funge da Proxy per tutte le proprietà presenti in <code>data</code>: se ad esempio dentro andate ad inserirci una proprietà che si chiama <code>a</code> e l'istanza di Vue che 
+            avete creato si chiama vm, potete accedervi con <code>vm.a</code>
+        </div>
+        <hr />
+        <div>
+            L'istanza Vue espone poi dei metodi e delle proprietà prefissati con il carattere <code>$</code>, come <code>$data</code>, <code>$el</code> e <code>$watch</code> a cui 
+            potete accedere rispettivamente con <code>vm.$data</code>, <code>vm.$el</code> e <code>vm.$watch</code><br />
+            <h1>{{a}}</h1>
+        </div>
+        <hr />
+        <div>
+            Esistono poi degli eventi che vengono generati durante il ciclo di vita dell'istanza e a cui potete agganciarvi se volete eseguire della logica custom. Esempi di questi 
+            eventi sono <code>created</code> e <code>mounted</code> ma ce ne sono altri...<br /><br />
+            Il diagramma completo del ciclo di vita di un'istanza Vue è <a href="https://vuejs.org/v2/guide/instance.html#Lifecycle-Diagram" target="_blank">questo</a>.
+        </div>
     </div>
     <script src="https://unpkg.com/vue/dist/vue.js"></script>
     <script type="text/javascript">
-        // Define a new component called todo-item
+        
         var data = {
-            a: 1
+            a: 'valore di a'
         };
 
         var vm = new Vue({
-            el: '#example',
+            el: '#app',
             data: data,
             created: function() {
                 console.log('created');
@@ -30,14 +62,16 @@
                 console.log('mounted');
             }
         })
+
         console.debug(vm.$data === data);
         console.debug(vm.$el === document.getElementById('example'));
 
-        vm.$watch('a', function(newVal, oldVal) {
+        vm.$watch('a', function (newVal, oldVal) {
+            // this callback will be called when `a` changes
             console.debug('a cambiata');
             console.debug('vecchio valore ' + oldVal);
             console.debug('nuovo valore ' + newVal);
-            // this callback will be called when `vm.a` changes
+            
         })
 
     </script>
