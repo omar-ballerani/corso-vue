@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Corso Vue.js</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <style>
+        #app {
+            margin-left: 50px;
+            margin-top: 50px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="app" class="container lead">
+        <parent-component>
+        </parent-component>
+    </div>
+    <script type="text/x-template" id="parent-component">
+        <div class='row'>
+
+            <child-component>
+                I'm a content from the parent
+            </child-component>
+            <hr />
+            <child-component></child-component>
+            <hr />
+            <other-child-component>
+                <h1 slot="header">Header from the parent</h1>
+            </other-child-component>
+            <hr />
+            <other-child-component>
+                <p slot="footer">Footer from the parent</p>
+            </other-child-component>
+        </div>
+    </script>
+    <script type="text/x-template" id="child-component">
+        <div>
+            <h2>I'm the child title</h2>
+            <slot>
+                This will only be displayed if there is no content
+                to be distributed.
+            </slot>
+        </div>
+    </script>
+    <script type="text/x-template" id="other-child-component">
+        <div>
+            <slot name="header">
+                Other child component header - displayed because there's no content passed from the parent
+            </slot>
+            <h4>I'm the other child component main content</h4>
+            <slot name="footer">
+                Other child component footer - displayed because there's no content passed from the parent
+            </slot>
+        </div>
+    </script>
+    
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+   
+    <script type="text/javascript">
+
+        var otherChildComponent = {
+            template: "#other-child-component",
+            data: function () {
+                return {
+                };
+            }
+        };
+
+        var childComponent = {
+            template: "#child-component",
+            data: function () {
+                return {
+                };
+            }
+        };
+
+        var parentComponent = {
+            template: "#parent-component",
+            data: function () {
+                return {
+                };
+            },
+            components: {
+                'child-component': childComponent,
+                'other-child-component': otherChildComponent
+            }
+        };
+
+        var vm = new Vue({
+            el: '#app',
+            data: {
+            },
+            components: {
+                'parent-component': parentComponent
+            }
+            
+
+        })
+
+    </script>
+</body>
+
+</html>
