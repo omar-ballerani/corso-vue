@@ -20,6 +20,7 @@
     <div id="app" class="container-fluid lead">
         <h4 v-show="levelMsg.length > 0">{{levelMsg}}</h4>
         <shopping-cart v-bind:purchased-products="products" currency="$" v-on:changed-total="evaluateLevel"></shopping-cart>
+        <shipping-selector v-bind:shipping-options="shippingOptions"></shipping-selector>
     </div>
     <script type="text/template" id="shopping-cart-template">
         <div>
@@ -38,8 +39,48 @@
 
         </div>
     </script>
+    <script type="text/template" id="shippinig-selector-template">
+        <div class="row">
+            Scegli una spedizione
+            <div v-for="item in availableShippingOptions">
+                <input type="radio" name="shippingId" v-bind:value="item.Id" />{{item.description}}
+            </div>
+        </div>
+    </script>
     <script src="https://unpkg.com/vue/dist/vue.js"></script>
+   
     <script type="text/javascript">
+        //empty istance as a message bus
+        var bus = new Vue();
+
+        //general params
+        const LEVEL_GOLD_LIMIT = 200.00;
+
+        Vue.component('shipping-selector', {
+            props: ['shippingOptions'],
+            template: "#shippinig-selector-template",
+            created: function () {
+                var self = this;
+                //register on changed total message
+                bus.$on('changed-total', function (params) {
+                    self.currentTotalPrice = params.totalPrice;
+                });
+            },
+            data: function () {
+                return {
+                    currentTotalPrice: 0
+                };
+            },
+            computed: {
+                availableShippingOptions: function () {
+                    return this.shippingOptions.filter(function (ele) {
+                        return this.currentTotalPrice >= ele.minTotalPrice;
+                    }, this);
+                }
+            }
+        });
+
+
         Vue.component('shopping-cart', {
             props: {
                 purchasedProducts: {
@@ -57,6 +98,9 @@
                     products: this.purchasedProducts
                 };
             },
+            mounted: function () {
+                this.pushTotal();
+            },
             methods: {
                 addQuantity: function(index) {
                     this.products[index].quantity++;
@@ -70,11 +114,12 @@
                     this.products.splice(index, 1);
                     this.pushTotal();
                 },
-                pushTotal: function() {
-                    var total = this.totalPrice;
-                    this.$emit('changed-total', {
-                        totalPrice: total
-                    });
+                pushTotal: function () {
+                    var msg = {
+                        totalPrice: this.totalPrice
+                    };
+                    this.$emit('changed-total', msg);
+                    bus.$emit('changed-total', msg);
                 }
             },
             computed: {
@@ -117,16 +162,24 @@
             unitPrice: 1.29
         }];
 
+        var shippingOptions = [
+            { id: "1", description: "standard shipping (5 working days)", minTotalPrice: 0 },
+            { id: "2", description: "fast shipping (2 working days)", minTotalPrice: 50 },
+            { id: "3", description: "prime shipping (1 working days)", minTotalPrice: 100 },
+            { id: "4", description: "drone shipping ( 2 hours )", minTotalPrice: 200 }
+        ];
+
         var vm = new Vue({
             el: '#app',
             data: {
                 products: products,
                 currency: '€',
-                levelMsg: ''
+                levelMsg: '',
+                shippingOptions: shippingOptions
             },
             methods: {
                 evaluateLevel: function(params) {
-                    if (params.totalPrice > 200) {
+                    if (params.totalPrice > LEVEL_GOLD_LIMIT) {
                         this.levelMsg = "Congratulazioni, con questo acquisto sei a livello oro!"
                     } else {
                         this.levelMsg = "";
