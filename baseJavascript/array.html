@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Corso Vue.js</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <style>
+        #app {
+            margin-left: 50px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <script type="text/javascript">
+
+        //creazione array
+        var a = [];
+        var b = ['a', 'b', 'c'];
+        var c = ['a', 14, {}, new Date()]
+        var d = new Array(5);
+        var e = new Array('a', 'b', 'c');
+
+        //accesso per indice
+        var ele = b[1];
+        console.log(ele);
+
+        //loop
+        for (var i = 0; i < b.length; i++) {
+            console.log(b[i]);
+        }
+
+        //loop for each
+        b.forEach(function (element) {
+            console.log(element);
+        });
+
+        //add to the end
+        var addArr = [1,2,3,4]
+        addArr.push(5);
+        console.log("addArr " + addArr);
+
+        //remove from the end
+        var popArr = [1, 2, 3, 4]
+        popArr.pop();
+        console.log("popArr " + popArr);
+
+        //remove from start
+        var shiftArr = [1, 2, 3, 4]
+        shiftArr.shift();
+        console.log("shiftArr " + shiftArr);
+
+        //Add to the front of an Array
+        var unshiftArr = [1, 2, 3, 4]
+        unshiftArr.unshift(0);
+        console.log("unshiftArr " + unshiftArr);
+
+        //Find the index of an item in the Array
+        var indexArr = [1, 2, 3, 4]
+        var indexOf = indexArr.indexOf(2);
+        console.log("indexOf " + indexOf);
+
+        //splice - cambia il contenuto di un array, rimuovendo elementi presenti e / o aggiungendone dei nuovi
+        //sintassi: array.splice(start, deleteCount, item1, item2, ...)
+
+        // rimuove tutti gli elementi a partire dall'indice 2
+        var spliceArr1 = [1, 2, 3, 4, 5];
+        spliceArr1.splice(2); 
+        console.log("spliceArr1 " + spliceArr1);
+
+        // rimuove 1 elemento a partire dall'indice 2
+        var spliceArr2 = [1, 2, 3, 4, 5];
+        spliceArr2.splice(3,1); 
+        console.log("spliceArr2 " + spliceArr2);
+
+        //aggiunge 2 elementi a partire dall'indice 2
+        var spliceArr3 = [1, 2, 3, 4, 5];
+        spliceArr3.splice(2, 0, 6, 7);
+        console.log("spliceArr3 " + spliceArr3);
+
+        //rimuove un elemento all'indice 3 e aggiunge 2 elementi a partire dall'indice 3
+        var spliceArr4 = [1, 2, 3, 4, 5];
+        spliceArr4.splice(3, 1, 6, 7);
+        console.log("spliceArr4 " + spliceArr4);
+
+
+        //resettare un array
+        var resetArr = [1, 2, 3];
+        resetArr.length = 0;
+        console.log("resetArr" + resetArr);
+
+        resetArr = [1, 2, 3];
+        resetArr = [];
+        console.log("resetArr" + resetArr);
+
+        //sort 
+        var sortArr = [5, 4, 3, 2, 1];
+        sortArr.sort();
+        console.log("sortArr" + sortArr);
+
+        //reverse
+        var revArr = [5, 4, 3, 2, 1];
+        revArr.reverse();
+        console.log("revArr" + revArr);
+
+    </script>
+</body>
+
+</html>
