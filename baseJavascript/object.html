@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Corso Vue.js</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <style>
+        #app {
+            margin-left: 50px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <script type="text/javascript">
+
+        //creazione
+
+        //literal 
+        var obj = {
+            a: 15,
+            b: 13,
+            sum: function () {
+                return this.a + this.b;
+            }
+        };
+        console.log(obj.sum());
+
+        //constructor function
+        function myObject(parA, parb) {
+            this.a = parA;
+            this.b = parb;
+            this.sum = function () {
+                return this.a + this.b;
+            }
+        }
+        var instance1 = new myObject(10, 15);
+        var instance2 = new myObject(10, 15);
+        console.log(instance1.sum());
+        console.log(instance2.sum());
+
+        //object create
+        console.log("---------------------------");
+        var Animal = {
+            type: "Animale base", 
+            displayType: function () {
+                console.log(this.type);
+            }
+        }
+
+        var animal1 = Object.create(Animal);
+        animal1.displayType(); 
+
+        var fish = Object.create(Animal);
+        fish.type = "Pesce";
+        fish.displayType();
+        fish.displayType = function () {
+            console.log("non lo so");
+        }
+        fish.displayType();
+        
+        console.log(Object.getPrototypeOf(fish));
+        console.log(Object.getPrototypeOf(fish) === Animal);
+
+    </script>
+</body>
+
+</html>
