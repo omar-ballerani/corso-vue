@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Corso Vue.js</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <style>
+        #app {
+            margin-left: 50px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <script type="text/javascript">
+
+        //In questo caso fa riferimento al contesto globale
+        console.log(this);
+
+        //contesto di funzione
+        //visto che la funzione a viene richiamata senza essere associata a niente, this punta all'oggetto globale, ovvero sempre la window
+        function a() {
+            return this;
+        }
+        console.log(a());
+        console.log(a() === window);
+
+        //come metodo di un oggetto:  il this, all'interno della funzione, viene impostato sull'oggetto di cui la funzione è metodo
+        var o = {
+            prop: 37,
+            f: function () {
+                return this.prop;
+            }
+        };
+        console.log(o.f());
+
+        //bisogna però fare attenzione perchè a come si dichiarano le funzioni
+        function myfunction() {
+            console.log(this.x);
+        }
+        var myObj = {
+            x: 55,
+            f: myfunction
+        };
+        myObj.f();
+        myfunction();
+        window.x = "ciao this";
+        myfunction();
+
+        //altro esempio
+        var fattura = { importo: 1000 };
+        function logImporto() {
+            console.log(this.importo);
+        }
+        fattura.mostraImporto = logImporto;
+        fattura.mostraImporto();
+
+        //gli esempi sopra dimostrano che non conta come la funzione venga definita, conta COME LA FUNZIONE VIENE RICHIAMATA, cioè il suo execution context
+
+        console.log("----------------------------------------------------------");
+
+        //this viene assocciato all'oggetto più vicino
+        function logProp1() {
+            console.log(this.prop1);
+        }
+        var childObj = {
+            prop1: "child",
+            show: logProp1
+        };
+        var parentObj = {
+            prop1: "parent",
+            show: logProp1,
+            child: childObj
+        };
+        parentObj.show();
+        parentObj.child.show();
+        childObj.show();
+
+        console.log("----------------------------------------------------------");
+
+        //esempio con oggetti ereditati
+        var prototypeInstance = {
+            num1: 10,
+            num2: 5,
+            logSum: function () {
+                console.log(this.num1 + this.num2);
+            }
+        };
+        var inheritIstance = Object.create(prototypeInstance);
+        inheritIstance.num1 = 30;
+        inheritIstance.num2 = 50;
+        inheritIstance.logSum();
+        Object.getPrototypeOf(inheritIstance).logSum();
+        prototypeInstance.logSum();
+
+        //esempio con constructor function
+        console.log("----------------------------------------------------------");
+
+        function myClass() {
+            this.myProperty = 20;
+        }
+
+        function myOtherClass() {
+            this.myProperty = 20; //<-- questa assegnazione è inutile, perchè l'oggetto che viene ritornato non è quello a cui punta this in questa riga e viene semplicemente scartato
+            return {
+                myProperty: 40
+            };
+        }
+
+        console.log(new myClass().myProperty);
+        console.log(new myOtherClass().myProperty);
+
+
+        //metodi call e apply
+        console.log("----------------------------------------------------------");
+        function add(c, d) {
+            return this.a + this.b + c + d;
+        }
+        var pocoObj = { a: 1, b: 3 };
+
+        //il primo parametro è l'oggetto che verrà usato come this, i parametri seguenti verranno usati come parametri della funzione
+        var callResult = add.call(pocoObj, 5, 7); // 1 + 3 + 5 + 7 = 16
+        console.log(callResult);
+
+        //il primo parametro è l'oggetto che verrà usato come this, il secondo parametro è un array i cui elementi verranno usati come parametri della funzione
+        var addResult = add.apply(pocoObj, [10, 20]); // 1 + 3 + 10 + 20 = 34
+        console.log(addResult);
+
+        var crazyObj = {
+            prop: "crazy obj prop",
+            log: function () {
+                console.log(this.prop);
+            }
+        };
+        crazyObj.log();
+        crazyObj.log.call({ prop: "another obj" });
+
+        //metodo bind
+        //chiamare lastFunction.bind(someObject) crea una nuova funzione con lo stesso corpo e visibità di lastFunction, 
+        //ma se nella funzione originale si trova la parola chiave this, nella nuova funzione viene PERMANENTEMENTE collegato 
+        //al primo argomento passato alla chiamata del metodo bind, ignorando come la funzione stessa venga usata. 
+        console.log("----------------------------------------------------------");
+        function lastFunction() {
+            return this.a;
+        }
+        var g = lastFunction.bind({ a: "a del primo oggetto bindato a g" });
+        console.log(g()); 
+
+        var o = { a: "a del secondo oggetto", f: lastFunction, g: g };
+        console.log(o.f(), "|", o.g()); 
+
+    </script>
+</body>
+
+</html>
