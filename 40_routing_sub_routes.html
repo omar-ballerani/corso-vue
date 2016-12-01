@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Corso Vue.js</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <style>
+        #app {
+            margin-left: 50px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" class="container lead">
+        <p>
+            <router-link v-for="client in clients" v-bind:to="'/client/' + client.id" v-bind:client="client">Client {{client.id}}</router-link>
+        </p>
+        <router-view></router-view>
+    </div>
+
+    <script type="text/x-template" id="client-component">
+        <div>
+            <div>
+                <h4>This is the client component for id {{ $route.params.id }} loaded at {{moment}} </h4>
+                <h4>Cliente con id {{client.id}} e nome {{client.name}}</h4>
+            </div>
+
+            <router-link v-bind:to="'/client/' + client.id + '/orders'">ordini</router-link>
+            <router-link v-bind:to="'/client/' + client.id + '/phones'">phones</router-link>
+            <br />
+
+            <router-view></router-view>
+
+        </div>
+    </script>
+
+    <script type="text/x-template" id="client-orders-component">
+        <div>
+            Ordini:
+            <ul>
+                <li v-for="order in orders">{{order.id}} total {{order.price}}</li>
+            </ul>
+        </div>
+    </script>
+    <script type="text/x-template" id="client-phones-component">
+        <div>
+            Numeri di telefono:
+            <ul>
+                <li v-for="phone in phones">{{phone.id}} number {{phone.number}}</li>
+            </ul>
+        </div>
+    </script>
+
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+
+    <script type="text/javascript">
+
+        var clients = [
+            {
+                id: 1,
+                name: "omar",
+                orders: [{ id: "abc", price: 100 }, { id: "fdf", price: 300 }],
+                phones: [{ id: "aaa", number: "+39 141414" }, { id: "414", number: "+39 141414" }]
+            },
+            {
+                id: 2,
+                name: "alessandro",
+                orders: [{ id: "221", price: 100 }, { id: "222", price: 300 }],
+                phones: [{ id: "22a", number: "+39 141414" }, { id: "22b", number: "+39 141414" }]
+            },
+            {
+                id: 3,
+                name: "pluto",
+                orders: [{ id: "331", price: 400 }, { id: "332", price: 1000 }],
+                phones: [{ id: "33a", number: "+39 141414" }, { id: "33b", number: "+39 141414" }]
+            }
+
+        ];
+
+        var clientComponent =
+            {
+                data: function () {
+                    return {
+                        moment: new Date(),
+                        client: {}
+                    }
+                },
+                methods: {
+                    setCurrentClient: function (clientId) {
+                        this.client = clients.find(function (element) {
+                            return element.id == clientId;
+                        })
+                    }
+                },
+                mounted: function () {
+                    this.setCurrentClient(this.$route.params.id);
+                },
+                template: '#client-component',
+                watch: {
+                    '$route': function (to, from) {
+                        this.setCurrentClient(to.params.id);
+                    }
+                }
+            };
+
+        var clientOrdersComponent = {
+            template: '#client-orders-component',
+            data: function () {
+                return {
+                    orders: []
+                }
+            },
+            methods: {
+                setCurrentOrders: function (clientId) {
+                    var client = this.client = clients.find(function (element) {
+                        return element.id == clientId;
+                    });
+                    this.orders = client.orders;
+
+                }
+            },
+            mounted: function () {
+                this.setCurrentOrders(this.$route.params.id);
+            }
+        };
+
+        var clientPhonesComponent = {
+            template: '#client-phones-component',
+            data: function () {
+                return {
+                    phones: []
+                }
+            },
+            methods: {
+                setCurrentPhones: function (clientId) {
+                    var client = this.client = clients.find(function (element) {
+                        return element.id == clientId;
+                    });
+                    this.phones = client.phones;
+
+                }
+            },
+            mounted: function () {
+                this.setCurrentPhones(this.$route.params.id);
+            }
+        };
+
+        var router = new VueRouter({
+            routes: [
+                      {
+                          path: '/client/:id',
+                          component: clientComponent,
+                          children: [
+                                    {
+                                        path: 'orders',
+                                        component: clientOrdersComponent
+                                    },
+                                    {
+                                        path: 'phones',
+                                        component: clientPhonesComponent
+                                    }
+                          ]
+                      }
+            ]
+        });
+
+        var app = new Vue({
+            router: router,
+            data: {
+                clients: clients
+            }
+        }).$mount('#app');
+
+    </script>
+</body>
+
+</html>

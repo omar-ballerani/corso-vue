@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Corso Vue.js</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <style>
+        #app {
+            margin-left: 50px;
+            margin-top: 50px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="app" class="container lead">
+        <input type="text" v-demo="message"></input>
+    </div>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+   
+    <script type="text/javascript">
+
+        Vue.directive('demo', {
+            //chiamata una volta sola, quando l'elemento viene bindato per la prima volta
+            bind: function (el, binding, vnode, oldVnode) {
+                console.log("bind");
+                console.log(el);
+                console.log(binding);
+                console.log(vnode);
+                console.log(oldVnode);
+            },
+            // When the bound element is inserted into the DOM...
+            inserted: function (el, binding, vnode, oldVnode) {
+                console.log("inserted");
+                console.log(el);
+                console.log(binding);
+                console.log(vnode);
+                console.log(oldVnode);
+            },
+            update: function (el, binding, vnode, oldVnode) {
+                console.log("update");
+                console.log(el);
+                console.log(binding);
+                console.log(vnode);
+                console.log(oldVnode);
+            },
+            componentUpdated: function (el, binding, vnode, oldVnode) {
+                console.log("componentUpdated");
+                console.log(el);
+                console.log(binding);
+                console.log(vnode);
+                console.log(oldVnode);
+            },
+        })
+
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                message: ''
+            }
+        })
+
+    </script>
+</body>
+
+</html>

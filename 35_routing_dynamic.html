@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Corso Vue.js</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <style>
+        #app {
+            margin-left: 50px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" class="container lead">
+        <p>
+            Spesso nelle vostre applicazioni avrete bisogno di route dinamiche, ovvero di route che hanno dei parametri nel loro url <br />
+            Questo potete farlo specificando semplicemente con la sintassi <code>:nome-proprietà</code> che volete passare come parametro<br />
+            I parametri ve li trovate poi nella collection <code>$route.params</code> <br />
+            <router-link v-for="client in clients" v-bind:to="'/client/' + client.id">Client {{client.id}}</router-link>
+            <hr />
+            Dovete tenere conto che l'istanza di un componente viene riusata... Per questo è utile aggiungere dei watch al route change sul componente.
+            <hr />
+            Potete anche passare più parametri....
+            <router-link to="/other/par1value/par2value">Other component</router-link>
+        </p>
+        <h1>qui sotto</h1>
+        <!-- route outlet -->
+        <!-- component matched by the route will render here -->
+        <router-view></router-view>
+    </div>
+
+    <script type="text/x-template" id="client-component">
+        <div>
+            <h4>This is the client component for id {{ $route.params.id }} loaded at {{moment}} </h4>
+            <h4>Cliente con id {{client.id}} e nome {{client.name}}</h4>
+        </div>
+    </script>
+
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+
+    <script type="text/javascript">
+
+        var clients = [{ id: 1, name: "omar" }, { id: 2, name: "alessandro" }, { id: 3, name: "pluto" }];
+
+        var clientComponent =
+            {
+                data: function () {
+                    return {
+                        moment: new Date(),
+                        client: {}
+                    }
+                },
+                template: '#client-component',
+                methods: {
+                    setCurrentClient: function (clientId) {
+                        this.client = clients.find(function (element) {
+                            return element.id == clientId;
+                        })
+                    }
+                },
+                mounted: function () {
+                    this.setCurrentClient(this.$route.params.id);
+                },
+                watch: {
+                    '$route': function (to, from) {
+
+                        console.log("route change");
+                        console.log("from " + from.fullPath + " to " + to.fullPath);
+                        console.log(to.params.id);
+                        this.setCurrentClient(to.params.id); //potete utilizzare anche $route.params.id
+                    }
+                }
+            };
+
+        var otherComponent = {
+            template: "<div><h4>Parameters {{$route.params.par1}} & {{$route.params.par2}} </h4></div>"
+        }
+
+        var router = new VueRouter({
+            routes: [
+                      { path: '/client/:id', component: clientComponent },
+                      { path: '/other/:par1/:par2', component: otherComponent }
+            ]
+        });
+
+        var app = new Vue({
+            router: router,
+            data: {
+                clients: clients
+            }
+        }).$mount('#app');
+
+    </script>
+</body>
+
+</html>

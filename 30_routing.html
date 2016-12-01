@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Corso Vue.js</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <style>
+        #app {
+            margin-left: 50px;
+            margin-top: 50px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="app" class="container lead">
+        <div>
+            Una Single Page Application viene eseguita all’interno di una singola pagina HTML: le risorse necessarie vengono caricate e aggiunte al DOM della pagina corrente. <br />
+            In altre parole, all’interno di una singola pagina vengono caricate viste diverse in base all’interazione dell’utente con la pagina stessa.<br />
+            La transizione tra una vista e l’altra dà l’illusione all’utente di continuare a navigare tra pagine diverse dal momento che ciascuna vista ha un proprio URL, anche se in realtà tutto avviene in un’unica pagina HTML. Il meccanismo che consente di mappare un URL ad una vista è detto routing.
+        </div>
+        <hr />
+        <div>
+            In Vue è consigliato utilizzare il router ufficiale <code>vue-router</code><br />
+            Partendo dalle basi: si può utilizzare il componente <code>router-link</code> per la navigazione e specificare il link tramite la proprietà <code>to</code>. Questo componente
+            di default verrà renderizzato come un tag <code>anchor</code> <br />
+            Le viste verranno renderizzate nel punto che specifichiamo con <code>router-view</code>
+        </div>
+        <h1>Hello routing!</h1>
+        <p>
+            <!--menù navigazione-->
+            <router-link to="/first">Go to First component</router-link>
+            <router-link to="/second">Go to Second component</router-link>
+        </p>
+        <hr />
+        <p>
+            Potete utilizzare <code>active-class</code> per specificare la classe css da applicare ad un link quando attivo<br />
+            <router-link to="/first" active-class="my-active-class">Go to First component</router-link>
+            <router-link to="/second" active-class="my-active-class">Go to Second component</router-link>
+        </p>
+        <hr />
+        <p>
+            Potete utilizzare <code>tag</code> per specificare che tipo di tag renderizzare, verrà comunque aggiunto un handler per l'evento <code>click</code> che effettua la navigazione<br />
+            <router-link to="/first" tag="button">Go to First component</router-link>
+            <router-link to="/second" tag="button">Go to Second component</router-link>
+            <br />
+            <router-link to="/first" tag="li">Go to First component</router-link>
+            <router-link to="/second" tag="li">Go to Second component</router-link>
+        </p>
+        <h1>qui sotto</h1>
+        <!-- route outlet -->
+        <!-- component matched by the route will render here -->
+        <router-view></router-view>
+    </div>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+   
+    <script type="text/javascript">
+
+        var firstComponent = { template: '<div>first component</div>' }
+        var secondComponent = { template: '<div>second component</div>' }
+
+        // 2. Define some routes
+        // Each route should map to a component. The "component" can
+        // either be an actual component constructor created via
+        // Vue.extend(), or just a component options object.
+        // We'll talk about nested routes later.
+        var router = new VueRouter({
+            routes: [
+                      { path: '/first', component: firstComponent },
+                      { path: '/second', component: secondComponent }
+            ]
+        });
+
+        var app = new Vue({
+            router: router
+        }).$mount('#app');
+
+    </script>
+</body>
+
+</html>
