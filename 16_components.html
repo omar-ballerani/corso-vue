@@ -12,182 +12,188 @@
             margin-left: 50px;
             margin-top: 50px;
         }
-
     </style>
 </head>
 
 <body>
-    <div id="app" class="container-fluid lead">
-        <h4 v-show="levelMsg.length > 0">{{levelMsg}}</h4>
-        <shopping-cart v-bind:purchased-products="products" currency="$" v-on:changed-total="evaluateLevel"></shopping-cart>
-        <shipping-selector v-bind:shipping-options="shippingOptions"></shipping-selector>
+    <div id="app" class="container lead">
+        <useless-component></useless-component>
+        <hr />
+        Hmmm questi counter non funzionano benissimo....
+        <simple-counter></simple-counter>
+        <simple-counter></simple-counter>
+        <simple-counter></simple-counter>
+        <hr />
+        Questi funzionano meglio!
+        <better-simple-counter></better-simple-counter>
+        <better-simple-counter></better-simple-counter>
+        <better-simple-counter></better-simple-counter>
+        <hr />
+        Questo componente prende in input un messaggio
+        <data-component-1 message="hello component"></data-component-1>
+        <hr />
+        Questo componente prende in input un messaggio ma lo passiamo con <code>v-bind</code>
+        <data-component-2 v-bind:message="myMessage"></data-component-2>
+        Tenente conto che i parametri che passate come proprietà dinamiche dal parent al component, se aggiornate nel parent vengono aggiornate anche nei component....
+        <input type="text" v-model="myMessage" class="form-control" />
+        <hr />
+        Se provate a mutare una property in un componente figlio Vue js vi da warning, vedremo perchè....
+        <h4>{{anotherMessage}}</h4>
+        <data-component-3 v-bind:message="anotherMessage"></data-component-3>
+        <hr />
+        Questo è un componente con della validazione...
+        <validated-component v-bind:price="productPrice"></validated-component>
+        <hr />
+        Un componente che emette degli eventi:
+        <message-component v-bind:initial-message="writableMessage" v-on:message-changed="childMessageChanged"></message-component>
+        <h4>Questo heading è nel parent, message: '{{writableMessage}}'</h4>
+        <h4>Il messaggio è stato modificato {{writableMessageUpdateCount}} volte'</h4>
+        <hr />
+        Esempio di custom input creato come componente<br />
+        <trim-input v-model="taxCode"></trim-input>
+        <h4>Valore nel parent {{taxCode}}</h4>
+        <br />
+        Un esempio carino di custom input: <a href="https://jsfiddle.net/chrisvfritz/1oqjojjx/?utm_source=website&utm_medium=embed&utm_campaign=1oqjojjx">currency input</a>
+        <hr />
+        Componente con template separato:
+        <last-component message="Hello template separato!"></last-component>
     </div>
-    <script type="text/x-template" id="shopping-cart-template">
+    <script type="text/x-template" id="last-component-template">
         <div>
-            <div class='row'>
-                <div class='col-md-4'>Totale {{ totalPrice }}</div>
-            </div>
-            <div class="row" v-for='(product,index) in products'>
-                <div class="col-md-1">{{product.name}}</div>
-                <div class="col-md-1">{{product.quantity}}</div>
-                <div class="col-md-1">{{currency}} {{product.unitPrice}}</div>
-                <div class="col-md-1">
-                    <button v-on:click="subtracrtQuantity(index)" class="">-1</button>
-                    <button v-on:click="addQuantity(index)" class="">+1</button></div>
-                <button v-on:click="remove(index)">Remove</button>
-            </div>
-
-        </div>
-    </script>
-    <script type="text/x-template" id="shippinig-selector-template">
-        <div class="row">
-            Scegli una spedizione
-            <div v-for="item in availableShippingOptions">
-                <input type="radio" name="shippingId" v-bind:value="item.Id" />{{item.description}}
-            </div>
+            Hurra! <br />
+            <h4>Questo è un template separato...</h4>
+            <h4>valore: {{message}}</h4>
         </div>
     </script>
     <script src="https://unpkg.com/vue/dist/vue.js"></script>
-   
     <script type="text/javascript">
-        //empty istance as a message bus
-        var bus = new Vue();
+        //registrazione di un componente
+        Vue.component('useless-component', {
+            template: '<div>A useless component, but still a component!</div>'
+        });
 
-        //general params
-        const LEVEL_GOLD_LIMIT = 200.00;
+        //nel caso di componenti, data deve essere una function, ma cerchiamo di capire perchè
+        var counterData = { counter: 0 };
+        Vue.component('simple-counter', {
+            template: '<button v-on:click="counter += 1">{{ counter }}</button>',
+            //in questo caso è una funzione ma che ritorna sempre la stessa istanza
+            data: function () {
+                return counterData
+            }
+        });
 
-        Vue.component('shipping-selector', {
-            props: ['shippingOptions'],
-            template: "#shippinig-selector-template",
-            created: function () {
-                var self = this;
-                //register on changed total message
-                bus.$on('changed-total', function (params) {
-                    self.currentTotalPrice = params.totalPrice;
-                });
-            },
+        //se invece torniamo istanze diverse per componenti diversi....
+        Vue.component('better-simple-counter', {
+            template: '<button v-on:click="counter += 1">{{ counter }}</button>',
             data: function () {
                 return {
-                    currentTotalPrice: 0
-                };
-            },
-            computed: {
-                availableShippingOptions: function () {
-                    return this.shippingOptions.filter(function (ele) {
-                        return this.currentTotalPrice >= ele.minTotalPrice;
-                    }, this);
+                    counter: 0
                 }
             }
         });
 
+        //ogni componente ha un suo isolated scope, ma può acquisire informazioni tramite 'props'
+        //in questo caso passeremo message con una proprietà 'literal'
+        Vue.component('data-component-1', {
+            template: '<h4>Messaggio passato dal parent: {{ message }}</h4>',
+            props: ['message']
+        });
 
-        Vue.component('shopping-cart', {
+
+        //potete utilizzare anche v-bind per passare le proprietà ai componenti
+        Vue.component('data-component-2', {
+            template: '<h4>Messaggio passato dal parent: {{ message }}</h4>',
+            props: ['message']
+        });
+
+        //
+        Vue.component('data-component-3', {
+            template: '<div><h4>Messaggio passato dal parent: {{ message }}</h4><input type="text" class="form-control" v-model="message"></div>',
+            props: ['message']
+        });
+
+
+        //è possibile specificare delle regole di validazione per le property props
+        Vue.component('validated-component', {
+            template: '<div><h4>{{description}} : $ {{ price }}</h4></div>',
             props: {
-                purchasedProducts: {
-                    type: Array,
-                    required: true
-                },
-                currency: {
+                description: {
                     type: String,
-                    require: true
-                }
-            },
-            template: "#shopping-cart-template",
-            data: function() {
-                return {
-                    products: this.purchasedProducts
-                };
-            },
-            mounted: function () {
-                this.pushTotal();
-            },
-            methods: {
-                addQuantity: function(index) {
-                    this.products[index].quantity++;
-                    this.pushTotal();
+                    required: false,
+                    default: 'Product description'
                 },
-                subtracrtQuantity: function(index) {
-                    this.products[index].quantity--;
-                    this.pushTotal();
-                },
-                remove: function(index) {
-                    this.products.splice(index, 1);
-                    this.pushTotal();
-                },
-                pushTotal: function () {
-                    var msg = {
-                        totalPrice: this.totalPrice
-                    };
-                    this.$emit('changed-total', msg);
-                    bus.$emit('changed-total', msg);
-                }
-            },
-            computed: {
-                totalPrice: function() {
-                    var tot = 0;
-                    for (var i = 0; i < this.products.length; i++) {
-                        var prod = this.products[i];
-                        tot = tot + (prod.quantity * prod.unitPrice);
-                    }
-                    return tot;
+                price: {
+                    type: Number,
+                    required: true
                 }
             }
-
         });
 
-        var products = [{
-            id: "1",
-            name: "calzini",
-            quantity: 10,
-            unitPrice: 5.99
-        }, {
-            id: "2",
-            name: "cinture",
-            quantity: 3,
-            unitPrice: 7.00
-        }, {
-            id: "3",
-            name: "bottoni",
-            quantity: 8,
-            unitPrice: 3.99
-        }, {
-            id: "4",
-            name: "scarpe",
-            quantity: 2,
-            unitPrice: 13.49
-        }, {
-            id: "5",
-            name: "bobina filo",
-            quantity: 3,
-            unitPrice: 1.29
-        }];
+        //per la comunicazione child -> parent, il metodo consigliato è quello di usare gli eventi
+        //tutte le istanze di Vue implementano un'interaccia per gli eventi che vi consente di:
+        //- scatenare degli eventi con $emit
+        //- reagire a degli eventi con $on o v-on
+        Vue.component('message-component', {
+            template: '<div> {{message}} <button v-on:click="changeMessage">Change message</button></div>',
+            data: function () {
+                return {
+                    message: this.initialMessage
+                }
+            },
+            props: ['initialMessage'],
+            methods: {
+                changeMessage: function () {
+                    this.message = "a random message";
+                    this.$emit('message-changed', {newMessage: this.message});
+                }
+            }
+        });
 
-        var shippingOptions = [
-            { id: "1", description: "standard shipping (5 working days)", minTotalPrice: 0 },
-            { id: "2", description: "fast shipping (2 working days)", minTotalPrice: 50 },
-            { id: "3", description: "prime shipping (1 working days)", minTotalPrice: 100 },
-            { id: "4", description: "drone shipping ( 2 hours )", minTotalPrice: 200 }
-        ];
+
+        //un utilizzo frequente dei component è ad esempio quello di creare dei custom input
+        //per fare questo dovete acquisire una property 'value' ed emettere un evento 'input'
+        Vue.component('trim-input', {
+            //ref='input' serve ad aggiungere a $refs del nostro componente il riferimento all'elemento DOM dell'input
+            template: '<span>Codice fiscale<input type="text" ref="input" v-bind:value="value" v-on:input="updateValue($event.target.value)"></span>',
+            props: ['value'],
+            methods: {
+                // Instead of updating the value directly, this
+                // method is used to format and place constraints
+                // on the input's value
+                updateValue: function (value) {
+                    var formattedValue = value.trim();
+                    this.$refs.input.value = formattedValue;
+                    // Emit the number value through the input event
+                    this.$emit('input', formattedValue)
+                }
+            }
+        });
+
+        //una possibilità interessante è quella di specificare un template nel document
+        Vue.component('last-component', {
+            template: '#last-component-template',
+            props: ['message']
+        });
+
 
         var vm = new Vue({
             el: '#app',
             data: {
-                products: products,
-                currency: '€',
-                levelMsg: '',
-                shippingOptions: shippingOptions
+                myMessage: "hello component, this is a dynamic message",
+                anotherMessage: "another message",
+                productPrice: 333,
+                writableMessage: "hello!",
+                writableMessageUpdateCount: 0,
+                taxCode: "BLLMRO79S414G325N"
+
             },
             methods: {
-                evaluateLevel: function(params) {
-                    if (params.totalPrice > LEVEL_GOLD_LIMIT) {
-                        this.levelMsg = "Congratulazioni, con questo acquisto sei a livello oro!"
-                    } else {
-                        this.levelMsg = "";
-                    }
-
+                childMessageChanged: function (event) {
+                    console.log(event);
+                    this.writableMessageUpdateCount++;
+                    this.writableMessage = event.newMessage;
                 }
             }
-
         })
 
     </script>

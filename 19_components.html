@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Corso Vue.js</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <style>
+        #app {
+            margin-left: 50px;
+            margin-top: 50px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="app" class="container-fluid lead">
+        <h4 v-show="levelMsg.length > 0">{{levelMsg}}</h4>
+        <shopping-cart v-bind:purchased-products="products" currency="$" v-on:changed-total="evaluateLevel"></shopping-cart>
+        <shipping-selector v-bind:shipping-options="shippingOptions"></shipping-selector>
+    </div>
+    <script type="text/x-template" id="shopping-cart-template">
+        <div>
+            <div class='row'>
+                <div class='col-md-4'>Totale {{ totalPrice }}</div>
+            </div>
+            <div class="row" v-for='(product,index) in products'>
+                <div class="col-md-1">{{product.name}}</div>
+                <div class="col-md-1">{{product.quantity}}</div>
+                <div class="col-md-1">{{currency}} {{product.unitPrice}}</div>
+                <div class="col-md-1">
+                    <button v-on:click="subtracrtQuantity(index)" class="">-1</button>
+                    <button v-on:click="addQuantity(index)" class="">+1</button></div>
+                <button v-on:click="remove(index)">Remove</button>
+            </div>
+
+        </div>
+    </script>
+    <script type="text/x-template" id="shippinig-selector-template">
+        <div class="row">
+            Scegli una spedizione
+            <div v-for="item in availableShippingOptions">
+                <input type="radio" name="shippingId" v-bind:value="item.Id" />{{item.description}}
+            </div>
+        </div>
+    </script>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+   
+    <script type="text/javascript">
+        //empty istance as a message bus
+        var bus = new Vue();
+
+        //general params
+        const LEVEL_GOLD_LIMIT = 200.00;
+
+        Vue.component('shipping-selector', {
+            props: ['shippingOptions'],
+            template: "#shippinig-selector-template",
+            created: function () {
+                var self = this;
+                //register on changed total message
+                bus.$on('changed-total', function (params) {
+                    self.currentTotalPrice = params.totalPrice;
+                });
+            },
+            data: function () {
+                return {
+                    currentTotalPrice: 0
+                };
+            },
+            computed: {
+                availableShippingOptions: function () {
+                    return this.shippingOptions.filter(function (ele) {
+                        return this.currentTotalPrice >= ele.minTotalPrice;
+                    }, this);
+                }
+            }
+        });
+
+
+        Vue.component('shopping-cart', {
+            props: {
+                purchasedProducts: {
+                    type: Array,
+                    required: true
+                },
+                currency: {
+                    type: String,
+                    require: true
+                }
+            },
+            template: "#shopping-cart-template",
+            data: function() {
+                return {
+                    products: this.purchasedProducts
+                };
+            },
+            mounted: function () {
+                this.pushTotal();
+            },
+            methods: {
+                addQuantity: function(index) {
+                    this.products[index].quantity++;
+                    this.pushTotal();
+                },
+                subtracrtQuantity: function(index) {
+                    this.products[index].quantity--;
+                    this.pushTotal();
+                },
+                remove: function(index) {
+                    this.products.splice(index, 1);
+                    this.pushTotal();
+                },
+                pushTotal: function () {
+                    var msg = {
+                        totalPrice: this.totalPrice
+                    };
+                    this.$emit('changed-total', msg);
+                    bus.$emit('changed-total', msg);
+                }
+            },
+            computed: {
+                totalPrice: function() {
+                    var tot = 0;
+                    for (var i = 0; i < this.products.length; i++) {
+                        var prod = this.products[i];
+                        tot = tot + (prod.quantity * prod.unitPrice);
+                    }
+                    return tot;
+                }
+            }
+
+        });
+
+        var products = [{
+            id: "1",
+            name: "calzini",
+            quantity: 10,
+            unitPrice: 5.99
+        }, {
+            id: "2",
+            name: "cinture",
+            quantity: 3,
+            unitPrice: 7.00
+        }, {
+            id: "3",
+            name: "bottoni",
+            quantity: 8,
+            unitPrice: 3.99
+        }, {
+            id: "4",
+            name: "scarpe",
+            quantity: 2,
+            unitPrice: 13.49
+        }, {
+            id: "5",
+            name: "bobina filo",
+            quantity: 3,
+            unitPrice: 1.29
+        }];
+
+        var shippingOptions = [
+            { id: "1", description: "standard shipping (5 working days)", minTotalPrice: 0 },
+            { id: "2", description: "fast shipping (2 working days)", minTotalPrice: 50 },
+            { id: "3", description: "prime shipping (1 working days)", minTotalPrice: 100 },
+            { id: "4", description: "drone shipping ( 2 hours )", minTotalPrice: 200 }
+        ];
+
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                products: products,
+                currency: '€',
+                levelMsg: '',
+                shippingOptions: shippingOptions
+            },
+            methods: {
+                evaluateLevel: function(params) {
+                    if (params.totalPrice > LEVEL_GOLD_LIMIT) {
+                        this.levelMsg = "Congratulazioni, con questo acquisto sei a livello oro!"
+                    } else {
+                        this.levelMsg = "";
+                    }
+
+                }
+            }
+
+        })
+
+    </script>
+</body>
+
+</html>
