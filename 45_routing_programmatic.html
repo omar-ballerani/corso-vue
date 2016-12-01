@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Corso Vue.js</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <style>
+        #app {
+            margin-left: 50px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" class="container lead">
+        <p>
+            <code>router.push</code> è il metodo utilizzato da <code>router-link</code>
+            Esempio di router fatto da codice
+            <br />
+            <button v-on:click="goToClient(1)">cliente 1</button>
+            <button v-on:click="goToClient(2)">cliente 2</button>
+            <button v-on:click="goToClient(3)">cliente 3</button>
+            <hr />
+        </p>
+        <router-view></router-view>
+        <div>
+            <code>router.replace</code> rimpiazza la current entry...
+            <br />
+            <button v-on:click="replaceToClient(1)">cliente 1</button>
+            <button v-on:click="replaceToClient(2)">cliente 2</button>
+            <button v-on:click="replaceToClient(3)">cliente 3</button>
+        </div>
+        <hr />
+        <div>
+            <code>router.go</code> serve ad andare avanti e indietro nella history
+            <br />
+            <button v-on:click="goHistory(2)">avanti di 2</button>
+            <button v-on:click="goHistory(-2)">indietro di 2</button>
+        </div>
+    </div>
+
+    <script type="text/x-template" id="client-component">
+        <div>
+            <h4>This is the client component for id {{ $route.params.id }} loaded at {{moment}} </h4>
+            <h4>Cliente con id {{client.id}} e nome {{client.name}}</h4>
+        </div>
+    </script>
+
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+
+    <script type="text/javascript">
+
+        var clients = [{ id: 1, name: "omar" }, { id: 2, name: "alessandro" }, { id: 3, name: "pluto" }];
+
+        var clientComponent =
+            {
+                data: function () {
+                    return {
+                        moment: new Date(),
+                        client: {}
+                    }
+                },
+                template: '#client-component',
+                methods: {
+                    setCurrentClient: function (clientId) {
+                        this.client = clients.find(function (element) {
+                            return element.id == clientId;
+                        })
+                    }
+                },
+                mounted: function () {
+                    this.setCurrentClient(this.$route.params.id);
+                },
+                watch: {
+                    '$route': function (to, from) {
+                        this.setCurrentClient(to.params.id);
+                    }
+                }
+            };
+
+        var otherComponent = {
+            template: "<div><h4>Parameters {{$route.params.par1}} & {{$route.params.par2}} </h4></div>"
+        }
+
+        var router = new VueRouter({
+            routes: [
+                      { path: '/client/:id', component: clientComponent },
+                      { path: '/other/:par1/:par2', component: otherComponent }
+            ]
+        });
+
+        var app = new Vue({
+            router: router,
+            data: {
+                clients: clients
+            },
+            methods: {
+                goToClient: function (clientId) {
+                    this.$router.push('/client/' + clientId);
+                },
+                replaceToClient: function (clientId) {
+                    this.$router.replace('/client/' + clientId);
+                },
+                goHistory: function (number) {
+                    this.$router.go(number);
+                }
+            }
+        }).$mount('#app');
+
+    </script>
+</body>
+
+</html>
