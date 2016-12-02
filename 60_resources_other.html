@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Corso Vue.js</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <style>
+        #app {
+            margin-left: 50px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" class="container lead">
+        <div v-if="errorCode.length > 0">
+            <h4 style="color:red;">Errore http: {{errorCode}}</h4>
+        </div>
+        <div v-if="currentAlbum" class="row">
+            <div class="col-md-2">
+                Id <input v-model="currentAlbum.id" disabled class="form-control" />
+            </div>
+            <div class="col-md-2">
+                Userid <input v-model="currentAlbum.userId" disabled class="form-control" />
+            </div>
+            <div class="col-md-8">
+            </div>
+            <div class="col-md-12">
+                Title <input v-model="currentAlbum.title" class="form-control" />
+            </div>
+            <div class="col-md-4">
+                <button v-on:click="saveCurrent" class="btn btn-primary">Save</button>
+                <button v-on:click="cancelCurrent" class="btn btn-danger">Cancel</button>
+            </div>
+            <div class="col-md-12">
+                &nbsp;
+            </div>
+        </div>
+
+        <div>
+            Lettura degli album: <span v-if="albums.length >0">{{albums.length}}</span><br /> 
+            <button v-on:click="getAlbums">GET Albums</button><button v-on:click="resetAlbums">Reset Albums</button>
+            <ul>
+                <li v-for="album in albums">
+                    {{album.id}} - {{album.title}}
+                    <button v-on:click="edit(album)">Edit</button>
+                    <button v-on:click="deleteAlbum(album)"  class="btn btn-danger">Delete</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-resource@1.0.3/dist/vue-resource.min.js"></script>
+
+    <script type="text/javascript">
+
+        var app = new Vue({
+            http: {
+                root: "https://jsonplaceholder.typicode.com"
+            },
+            data: {
+                albums: [],
+                posts: [],
+                errorCode: '',
+                currentAlbum: null
+            },
+            methods: {
+                onHttpError: function (response) {
+                    console.log('Errore http');
+                    console.log(response);
+                    this.errorCode = response.status.toString();
+                },
+                resetAlbums: function () {
+                    this.albums = [];
+                    this.currentAlbum = null;
+                },
+                getAlbums: function () {
+                    this.$http.get('albums').then(function (response) {
+
+                        console.log(response);
+
+                        var ourAlbums = this.albums;
+
+                        if (response.ok) {
+
+                            ourAlbums.length = 0;
+
+                            response.json().then(function (albums) {
+                                for (var i = 0; i < albums.length; i++) {
+                                    albums[i].detailText = "";
+                                    ourAlbums.push(albums[i]);
+                                }
+                            });
+                        }
+
+                    }, this.onHttpError);
+                },
+                edit: function (album) {
+                    //clone album 
+                    this.currentAlbum = JSON.parse(JSON.stringify(album))
+                },
+                saveCurrent: function () {
+                    this.$http.put('albums/' + this.currentAlbum.id, this.currentAlbum).then(function (response) {
+
+                        console.log(response);
+
+                        if (response.ok) {
+
+                            var newElement = this.currentAlbum;
+
+                            //replace the album with the new one
+                            var oldElement = this.albums.find(function (ele) {
+                                return ele.id === newElement.id;
+                            })
+
+                            oldElement.title = newElement.title;
+
+                            this.currentAlbum = null;
+
+                        }
+                    }, this.onHttpError);
+                },
+                cancelCurrent: function () {
+                    this.currentAlbum = null;
+                },
+                deleteAlbum: function (albumToDelete) {
+
+                    this.$http.delete('albums/' + albumToDelete.id).then(function (response) {
+
+                        console.log(response);
+
+                        if (response.ok) {
+                            //remove the element from our array
+                            var oldElement = this.albums.find(function (ele) {
+                                return ele.id === albumToDelete.id;
+                            });
+                            var index = this.albums.indexOf(oldElement);
+                            this.albums.splice(index, 1);
+                        }
+                    }, this.onHttpError);
+                }
+            }
+        }).$mount('#app');
+
+
+        Vue.http.interceptors.push((request, next) => {
+            app.errorCode = "";
+            next();
+        });
+
+    </script>
+</body>
+
+</html>
