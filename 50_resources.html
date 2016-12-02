@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Corso Vue.js</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <style>
+        #app {
+            margin-left: 50px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" class="container lead">
+        <div>
+            Vue-resource è un client http che si può utilizzare per inviare richieste http.<br /><br />
+            Link: <a href="https://github.com/pagekit/vue-resource">https://github.com/pagekit/vue-resource</a><br /><br />
+            Dopo aver caricato lo script, il servizio http si può utilizzare o globalmente facendo riferimento a <code>Vue.http</code> o in ogni istanza Vue tramite <code>this.$http</code><br /><br />
+            Per i nostri esempi ed esercizi utilizzeremo questi services finti: <a href="https://jsonplaceholder.typicode.com/">https://jsonplaceholder.typicode.com/</a>
+        </div>
+        <hr />
+        <div>
+            Tutti i metodi che inviano richieste http ritornano una <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a><br /><br />
+            La sintassi standard che dovete utilizzare è <code>this.$http.get('/someUrl').then(successCallback,errorCallback)</code><br /><br />
+        </div>
+        <hr />
+        <div>
+            Potete configurare parametri standard in questo modo: <a href="https://github.com/pagekit/vue-resource/blob/master/docs/config.md">Configuration</a><br /><br />
+            Per effettuare request http questa è la guida di riferimento: <a href="https://github.com/pagekit/vue-resource/blob/master/docs/http.md">Http request / response</a>
+        </div>
+        
+    </div>
+
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-resource@1.0.3/dist/vue-resource.min.js"></script>
+
+    <script type="text/javascript">
+
+
+
+
+        var app = new Vue({
+            methods: {
+                testHttp: function () {
+                    this.$http.get('https://jsonplaceholder.typicode.com/albums').then(function (response) {
+                        console.log(response);
+                    }
+                    , function (error) {
+                        console.log('error');
+                        console.log(error);
+                    }
+                    );
+                }
+            }
+        }).$mount('#app');
+
+    </script>
+</body>
+
+</html>

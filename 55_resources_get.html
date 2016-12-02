@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Corso Vue.js</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <style>
+        #app {
+            margin-left: 50px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" class="container lead">
+        <div v-if="errorCode.length > 0">
+            <h4 style="color:red;">Errore http: {{errorCode}}</h4>
+        </div>
+        <div>
+            Lettura degli album: <span v-if="albums.length >0">{{albums.length}}</span><br /> 
+            <button v-on:click="getAlbums">GET Albums</button><button v-on:click="resetAlbums">Reset Albums</button>
+            <ul>
+                <li v-for="album in albums">
+                    {{album.id}} - {{album.title}}
+                    <button v-on:click="getAlbumDetail(album)">Detail</button>
+                    <span v-if="album.detailText">{{album.detailText}}</span>
+                </li>
+            </ul>
+        </div>
+        <hr />
+        <div>
+            GET che va in errore: <br />
+            <button v-on:click="wrongGet">GET an error!</button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-resource@1.0.3/dist/vue-resource.min.js"></script>
+
+    <script type="text/javascript">
+
+        var app = new Vue({
+            http: {
+                root: "https://jsonplaceholder.typicode.com"
+            },
+            data: {
+                albums: [],
+                posts: [],
+                errorCode: ''
+            },
+            methods: {
+                onHttpError: function (response) {
+                    console.log('Errore http');
+                    console.log(response);
+                    this.errorCode = response.status.toString();
+                },
+                wrongGet: function () {
+                    this.$http.get('albums/5303850380').then(function (response) {
+                        console.log(response);
+                    }, this.onHttpError);
+                },
+                resetAlbums: function () {
+                    this.albums = [];
+                },
+                getAlbums: function () {
+                    this.$http.get('albums').then(function (response) {
+
+                        console.log(response);
+
+                        var ourAlbums = this.albums;
+
+                        if (response.ok) {
+
+                            ourAlbums.length = 0;
+
+                            //for (var i = 0; i < response.body.length; i++) {
+                            //    response.body[i].detailText = "";
+                            //    ourAlbums.push(response.body[i]);
+                            //}
+
+                            response.json().then(function (albums) {
+                                for (var i = 0; i < albums.length; i++) {
+                                    albums[i].detailText = "";
+                                    ourAlbums.push(albums[i]);
+                                }
+                            });
+                        }
+
+                    }, this.onHttpError);
+                },
+                getAlbumDetail: function (album) {
+                    this.$http.get('albums/' + album.id).then(function (response) {
+
+                        console.log(response);
+
+                        if (response.ok) {
+                            response.text().then(function (albumText) {
+                                album.detailText = albumText;
+                            });
+                        }
+
+                    }, this.onHttpError);
+                }
+            }
+        }).$mount('#app');
+
+
+        Vue.http.interceptors.push((request, next) => {
+            app.errorCode = "";
+            next();
+        });
+
+    </script>
+</body>
+
+</html>
